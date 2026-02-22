@@ -1,25 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app/views/todo_list_view.dart';
-
+import 'package:todo_app/controllers/task_controller.dart';
+import 'package:todo_app/views/home_view.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const ModernTodoApp());
+  runApp(const TaskApp());
 }
 
-class ModernTodoApp extends StatelessWidget {
-  const ModernTodoApp({super.key});
+class TaskApp extends StatelessWidget {
+  const TaskApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Modern Todo',
-      theme: ThemeData(
-        useMaterial3: true,
-        colorSchemeSeed: Colors.deepPurple,
-        brightness: Brightness.light,
+    return ChangeNotifierProvider(
+      create: (context) => TaskController(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          brightness: Brightness.light,
+          scaffoldBackgroundColor: Colors.white,
+        ),
+        home: const HomeView(),
       ),
-      home: const TodoListView(),
     );
   }
 }
