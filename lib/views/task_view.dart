@@ -14,7 +14,7 @@ class TaskView extends StatelessWidget {
   const TaskView({super.key, required this.filter});
 
   List<TaskModel> _getFilteredTasks(BuildContext context) {
-    final tasks = context.read<TaskCubit>().tasks;
+    final tasks = context.watch<TaskCubit>().tasks;
     switch (filter) {
       case TaskFilter.pending:
         return tasks.where((t) => !t.isDone).toList();
@@ -58,7 +58,7 @@ class TaskView extends StatelessWidget {
           Expanded(
             child: BlocBuilder<TaskCubit, TaskState>(
               builder: (context, state) {
-                if (state is TaskLoaded) {
+                if (state.tasks.isNotEmpty) {
                   return TaskList(tasks: filteredTasks);
                 }
                 return Center(

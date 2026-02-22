@@ -1,34 +1,36 @@
-
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_app/model/task_model.dart';
 
 part 'task_state.dart';
 
 class TaskCubit extends Cubit<TaskState> {
-  TaskCubit() : super(TaskInitial());
-  final List<TaskModel> _tasks = [];
-  var _category = "";
+  TaskCubit() : super(TaskState.initial());
 
+  var _category = "";
+List<TaskModel> get tasks => state.tasks;
   String get category => _category;
-  List<TaskModel> get tasks => _tasks;
   void addTask(TaskModel task) {
-    _tasks.add(task);
-    emit(TaskLoaded(tasks: _tasks));
+    List<TaskModel> tasks = state.tasks.toList();
+    tasks.add(task);
+    emit(TaskState(tasks: tasks));
   }
 
   void selectCategory(String category) {
     _category = category;
-    emit(TaskLoaded(tasks: _tasks));
+    emit(TaskState(tasks: state.tasks));
   }
 
   void toggleTaskStatus(TaskModel task, bool? isDone) {
     task.isDone = isDone ?? false;
-    emit(TaskLoaded(tasks: _tasks));
+    List<TaskModel> tasks = state.tasks.toList();
+    int index = tasks.indexOf(task);
+    tasks[index] = task;
+    emit(TaskState(tasks: tasks));
   }
 
   void deleteTask(TaskModel task) {
-    _tasks.remove(task);
-    emit(TaskLoaded(tasks: _tasks));
+    List<TaskModel> tasks = state.tasks.toList();
+    tasks.remove(task);
+    emit(TaskState(tasks: tasks));
   }
 }

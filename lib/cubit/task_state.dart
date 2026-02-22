@@ -1,12 +1,14 @@
 part of 'task_cubit.dart';
 
-@immutable
-sealed class TaskState {}
-
-final class TaskInitial extends TaskState {}
-
-final class TaskLoaded extends TaskState {
+class TaskState {
   final List<TaskModel> tasks;
+  TaskState({required this.tasks});
 
-  TaskLoaded({required this.tasks});
+  TaskState copyWith({List<TaskModel>? tasks}) {
+    return TaskState(tasks: tasks ?? this.tasks);
+  }
+
+  factory TaskState.initial() {
+    return TaskState(tasks: []);
+  }
 }
