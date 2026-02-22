@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app/controllers/task_controller.dart';
+import 'package:todo_app/cubit/task_cubit.dart';
 import 'package:todo_app/model/task_model.dart';
 import 'package:provider/provider.dart';
 
@@ -20,7 +20,7 @@ class TaskItem extends StatelessWidget {
         child: const Icon(Icons.delete, color: Colors.white),
       ),
       onDismissed: (_) {
-        context.read<TaskController>().deleteTask(task);
+        context.read<TaskCubit>().deleteTask(task);
       },
       child: Padding(
         padding: const EdgeInsets.only(bottom: 24),
@@ -37,7 +37,7 @@ class TaskItem extends StatelessWidget {
                 ),
                 onChanged: (val) {
                   if (val == null) return;
-                  context.read<TaskController>().toggleTaskStatus(task, val);
+                  context.read<TaskCubit>().toggleTaskStatus(task, val);
                 },
               ),
             ),

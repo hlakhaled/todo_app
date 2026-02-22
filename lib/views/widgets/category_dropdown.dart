@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app/controllers/task_controller.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo_app/cubit/task_cubit.dart';
 
 class CategoryDropdown extends StatelessWidget {
   const CategoryDropdown({super.key});
@@ -28,13 +28,13 @@ class CategoryDropdown extends StatelessWidget {
           ),
         ],
       ),
-      child: Consumer<TaskController>(
-        builder: (context, taskController, child) {
+      child: BlocBuilder<TaskCubit, TaskState>(
+        builder: (context, state) {
+          final category = context.watch<TaskCubit>().category;
+
           return DropdownButtonHideUnderline(
             child: DropdownButton<String>(
-              value: taskController.category.isEmpty
-                  ? null
-                  : taskController.category,
+              value: category.isEmpty ? null : category,
               isExpanded: true,
               icon: const Icon(
                 Icons.keyboard_arrow_down,
@@ -59,7 +59,9 @@ class CategoryDropdown extends StatelessWidget {
                   )
                   .toList(),
               onChanged: (val) {
-                taskController.selectCategory(val!);
+                if (val != null) {
+                  context.read<TaskCubit>().selectCategory(val);
+                }
               },
             ),
           );
@@ -68,7 +70,6 @@ class CategoryDropdown extends StatelessWidget {
     );
   }
 
-  // UI Helper for Icons
   Widget _categoryIcon(String category) {
     switch (category.toLowerCase()) {
       case 'personal':
@@ -86,7 +87,6 @@ class CategoryDropdown extends StatelessWidget {
     }
   }
 
-  // UI Helper for Colors
   Color _categoryColor(String category) {
     switch (category.toLowerCase()) {
       case 'personal':

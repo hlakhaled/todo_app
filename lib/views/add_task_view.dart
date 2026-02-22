@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todo_app/controllers/task_controller.dart';
+import 'package:todo_app/cubit/task_cubit.dart';
 import 'package:todo_app/model/task_model.dart';
 import 'package:todo_app/views/widgets/category_dropdown.dart';
 import 'package:todo_app/views/widgets/date_field.dart';
@@ -52,13 +52,13 @@ class _AddTaskViewState extends State<AddTaskView> {
               child: ElevatedButton(
                 onPressed: () {
                   TaskModel newTask = TaskModel(
-                   id: DateTime.now().millisecondsSinceEpoch.toString(),
+                    id: DateTime.now().millisecondsSinceEpoch.toString(),
                     title: _taskController.text,
                     time: _dateController.text,
-                    category: context.read<TaskController>().category,
+                    category: context.read<TaskCubit>().category,
                   );
-                  context.read<TaskController>().addTask(newTask);
-                  context.read<TaskController>().selectCategory("");
+                  context.read<TaskCubit>().addTask(newTask);
+                  context.read<TaskCubit>().selectCategory("");
                   _taskController.clear();
                   _dateController.clear();
                 },

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_app/controllers/task_controller.dart';
+import 'package:todo_app/cubit/task_cubit.dart';
 import 'package:todo_app/views/home_view.dart';
 import 'package:provider/provider.dart';
 
@@ -12,8 +14,8 @@ class TaskApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => TaskController(),
+    return BlocProvider(
+      create: (context) => TaskCubit(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
