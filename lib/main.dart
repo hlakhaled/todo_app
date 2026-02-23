@@ -5,6 +5,8 @@ import 'package:todo_app/data/local/shared_prefs_service.dart';
 import 'package:todo_app/views/home_view.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
   runApp(const TaskApp());
 }
 
@@ -14,9 +16,7 @@ class TaskApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => TaskCubit(
-        prefsService: SharedPrefsService(),
-      ),
+      create: (context) => TaskCubit(prefsService: SharedPrefsService()),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(

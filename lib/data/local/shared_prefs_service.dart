@@ -15,14 +15,20 @@ class SharedPrefsService {
   Future<List<TaskModel>> getData() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String> todoList = prefs.getStringList('todos') ?? [];
+
     return todoList.map((item) {
-      final Map<String, dynamic> data = jsonDecode(item);
+      final dynamic decoded = jsonDecode(item);
+
+      final Map<String, dynamic> data = decoded is String
+          ? jsonDecode(decoded)
+          : decoded;
+
       return TaskModel(
-        id: data['id'],
-        title: data['title'],
-        time: data['time'],
-        isDone: data['isDone'],
-        category: data['category'],
+        id: data['id'].toString(),
+        title: data['title'].toString(),
+        time: data['time'].toString(),
+        isDone: data['isDone'] as bool,
+        category: data['category'].toString(),
       );
     }).toList();
   }
