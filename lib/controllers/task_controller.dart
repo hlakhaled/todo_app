@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:todo_app/model/task_model.dart';
+import 'package:todo_app/data/model/task_model.dart';
 
 class TaskController extends ChangeNotifier {
   final List<TaskModel> _tasks = [];

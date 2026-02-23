@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_app/cubit/task_cubit.dart';
-import 'package:todo_app/model/task_model.dart';
+import 'package:todo_app/data/model/task_model.dart';
 import 'package:todo_app/views/widgets/home_header.dart';
 import 'package:todo_app/views/widgets/task_list.dart';
 import 'package:provider/provider.dart';

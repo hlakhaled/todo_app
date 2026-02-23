@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todo_app/controllers/task_controller.dart';
 import 'package:todo_app/cubit/task_cubit.dart';
+import 'package:todo_app/data/local/shared_prefs_service.dart';
 import 'package:todo_app/views/home_view.dart';
-import 'package:provider/provider.dart';
 
 void main() {
   runApp(const TaskApp());
@@ -15,7 +14,9 @@ class TaskApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => TaskCubit(),
+      create: (context) => TaskCubit(
+        prefsService: SharedPrefsService(),
+      ),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(

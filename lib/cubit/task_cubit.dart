@@ -1,18 +1,30 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todo_app/model/task_model.dart';
+import 'package:todo_app/data/local/shared_prefs_service.dart';
+import 'package:todo_app/data/model/task_model.dart';
 
 part 'task_state.dart';
 
 class TaskCubit extends Cubit<TaskState> {
-  TaskCubit() : super(TaskState.initial());
+  final SharedPrefsService prefsService;
 
-  var _category = "";
-List<TaskModel> get tasks => state.tasks;
+  TaskCubit({required this.prefsService}) : super(TaskState.initial()) {
+    loadTasks();
+  }
+
+  String _category = "";
+
+  List<TaskModel> get tasks => state.tasks;
   String get category => _category;
-  void addTask(TaskModel task) {
-    List<TaskModel> tasks = state.tasks.toList();
-    tasks.add(task);
-    emit(TaskState(tasks: tasks));
+
+  Future<void> loadTasks() async {
+    final loadedTasks = await prefsService.getData();
+    emit(TaskState(tasks: loadedTasks));
+  }
+
+  Future<void> addTask(TaskModel task) async {
+    final List<TaskModel> updatedTasks = List.from(state.tasks)..add(task);
+    await prefsService.addData(task);
+    emit(TaskState(tasks: updatedTasks));
   }
 
   void selectCategory(String category) {
@@ -20,17 +32,27 @@ List<TaskModel> get tasks => state.tasks;
     emit(TaskState(tasks: state.tasks));
   }
 
-  void toggleTaskStatus(TaskModel task, bool? isDone) {
-    task.isDone = isDone ?? false;
-    List<TaskModel> tasks = state.tasks.toList();
-    int index = tasks.indexOf(task);
-    tasks[index] = task;
-    emit(TaskState(tasks: tasks));
+  Future<void> toggleTaskStatus(TaskModel task, bool? isDone) async {
+    final List<TaskModel> updatedTasks = List.from(state.tasks);
+
+    final index = updatedTasks.indexWhere((t) => t.id == task.id);
+
+    if (index != -1) {
+      updatedTasks[index] = task.copyWith(isDone: isDone ?? false);
+    }
+
+    await prefsService.saveAll(updatedTasks);
+
+    emit(TaskState(tasks: updatedTasks));
   }
 
-  void deleteTask(TaskModel task) {
-    List<TaskModel> tasks = state.tasks.toList();
-    tasks.remove(task);
-    emit(TaskState(tasks: tasks));
+  Future<void> deleteTask(TaskModel task) async {
+    final List<TaskModel> updatedTasks = state.tasks
+        .where((t) => t.id != task.id)
+        .toList();
+
+    await prefsService.saveAll(updatedTasks);
+
+    emit(TaskState(tasks: updatedTasks));
   }
 }
